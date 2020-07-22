@@ -17,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('v1/product','APIController@APIListProducts');
+Route::get('v1/product/{id}','APIController@APIGetProduct');
+Route::post('v1/product','APIController@APICreateProduct');
