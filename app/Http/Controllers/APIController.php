@@ -48,7 +48,19 @@ class APIController extends Controller
 
     public function APICreateProduct(Request $request)
     {
-        
+        try {
+            $product = new Product;
+            $product->prod_name = $request->prod_name;
+            $product->prod_price = $request->prod_price;
+            $product->prod_cat = $request->prod_cat;
+            $product->save();
+            return response()->json($product,201);
+        } catch (Exception $exception) {
+            return response()->json([
+                'error' => true,
+                'msg' => 'Ocurrio un error al momento del registro. Intente nuevamente en unos minutos'
+            ],500);
+        }
     }
     
 }
