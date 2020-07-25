@@ -18,7 +18,7 @@ class APIController extends Controller
             return response()->json($products,200);
         } catch (Exception $exception) {
             return response()->json([
-                'error' => true,
+                'error' => $exception->getMessage(),
                 'msg' => 'Ocurrio un error al momento de la consulta. Intente nuevamente en unos minutos'
             ],500);
         }
@@ -40,7 +40,7 @@ class APIController extends Controller
             }
         } catch (Exception $exception) {
             return response()->json([
-                'error' => true,
+                'error' => $exception->getMessage(),
                 'msg' => 'Ocurrio un error al momento de la consulta. Intente nuevamente en unos minutos'
             ],500);
         }
@@ -57,8 +57,51 @@ class APIController extends Controller
             return response()->json($product,201);
         } catch (Exception $exception) {
             return response()->json([
-                'error' => true,
+                'error' => $exception->getMessage(),
                 'msg' => 'Ocurrio un error al momento del registro. Intente nuevamente en unos minutos'
+            ],500);
+        }
+    }
+
+    public function APIUpdateProduct($id, Request $request)
+    {
+        try {
+            $product = Product::find($id);
+            if (!empty($product)) {
+                $product->update($request->all());
+                return response()->json($product,200);
+            } else {
+                return response()->json([
+                    'msg' => 'Producto no encontrado'
+                ],404);
+            }
+            
+        } catch (Exception $exception) {
+            return response()->json([
+                'error' => $exception->getMessage(),
+                'msg' => 'Ocurrio un error al momento de actualizar el registro. Intente nuevamente en unos minutos'
+            ],500);
+        }
+    }
+
+    public function APIDeleteProduct($id)
+    {
+        try {
+            $product = Product::find($id);
+            if (!empty($product)) {
+                $product->delete();
+                return response()->json([
+                    'msg' => 'Producto eliminado correctamente'
+                ],200);
+            } else {
+                return response()->json([
+                    'msg' => 'Producto no encontrado'
+                ],404);
+            }
+        } catch (Exception $exception) {
+            return response()->json([
+                'error' => $exception->getMessage(),
+                'msg' => 'Ocurrio un error al momento de eliminar el registro. Intente nuevamente en unos minutos'
             ],500);
         }
     }
